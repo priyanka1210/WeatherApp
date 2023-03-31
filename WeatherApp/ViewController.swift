@@ -36,7 +36,7 @@ class ViewController: UIViewController {
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-       // setupLocation()
+        // setupLocation()
         if currentLocation == nil {
             if let location = UserDefaults.standard.value(forKey: "Location") as? String {
                 cityTextField.text = location
@@ -65,7 +65,11 @@ class ViewController: UIViewController {
     // Method which will fetch temperature details from city
     func performSerch(city: String){
         UserDefaults.standard.set(city, forKey: "Location")
-        viewModel.fetchWeatherDetailsByCity(city: city){ [weak self] location, desc, temp, icon in
+        viewModel.fetchWeatherDetailsByCity(city: city){ [weak self] location, desc, temp, icon, error in
+            guard let location = location,let desc = desc, let temp = temp, let icon = icon else {
+                self?.showAlert(title: "Alert", message: "Data not found")
+                return
+            }
             DispatchQueue.main.async {
                 self?.cityNameLabel.text = "\(location) Temperature"
                 self?.descriptionLabel.text = desc
@@ -79,10 +83,10 @@ class ViewController: UIViewController {
                 }
             } catch let error {
                 switch error {
-                case IconError.invalidIcon :
+                case weatherError.invalidIcon :
                     print("Unable to makeURL from Icon")
                 default:
-                    print("Faile to make request")
+                    self?.showAlert(title: "Alert", message: error.localizedDescription)
                 }
             }
             
@@ -99,23 +103,42 @@ class ViewController: UIViewController {
         
         let latitude = currentLocation.coordinate.latitude
         
-        viewModel.fetchWeatherDetailsByLocation(latitude: latitude, longitude: longitude) { [self] location,desc,  temperature, icon in
+        viewModel.fetchWeatherDetailsByLocation(latitude: latitude, longitude: longitude) { [weak self] location, desc, temperature, icon, error in
+            guard let location = location,let desc = desc, let temperature = temperature, let icon = icon else {
+                self?.showAlert(title: "Alert", message: "Data not found")
+                return
+            }
             DispatchQueue.main.async { [weak self] in
                 self?.cityNameLabel.text = "\(location) Temperature"
                 self?.temperatureLabel.text = temperature
                 self?.descriptionLabel.text = desc
             }
-            
             do{
-                try viewModel.getWeatherImageFromIcon(icon: icon) { image in
+                try self?.viewModel.getWeatherImageFromIcon(icon: icon) { image in
                     DispatchQueue.main.async { [weak self] in
                         self?.weatherImageView.image = image
                     }
                 }
             } catch{
-                print(error.localizedDescription)
+                self?.showAlert(title: "Alert", message: "Unable to fetch Weather by Location")
             }
             
+        }
+        
+    }
+    func showAlert(title: String, message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default){ [weak self] _ in
+            self?.temperatureLabel.text = ""
+            self?.descriptionLabel.text = ""
+            self?.cityNameLabel.text = ""
+            self?.weatherImageView.image = nil
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        alertController.addAction(okAction)
+        alertController.addAction(cancelAction)
+        DispatchQueue.main.async {
+            self.present(alertController, animated: true)
         }
         
     }

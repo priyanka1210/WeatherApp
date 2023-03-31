@@ -37,27 +37,27 @@
                                     <action selector="searchTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="f6r-nt-8UF"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Temperature Details" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CUc-hy-Em9">
-                                <rect key="frame" x="10" y="249" width="259" height="26"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CUc-hy-Em9">
+                                <rect key="frame" x="10" y="249" width="259" height="0.0"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="21"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="T8y-Y1-yaa">
-                                <rect key="frame" x="25" y="315" width="120" height="120"/>
+                                <rect key="frame" x="25" y="289" width="120" height="120"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="120" id="QsG-vU-ho5"/>
                                     <constraint firstAttribute="width" constant="120" id="psU-3s-4Fa"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Z69-qp-0KA">
-                                <rect key="frame" x="175" y="336.33333333333331" width="187" height="20.666666666666686"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Z69-qp-0KA">
+                                <rect key="frame" x="175" y="310.33333333333331" width="187" height="0.0"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pge-C6-kEq">
-                                <rect key="frame" x="175" y="381" width="175" height="20.666666666666686"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pge-C6-kEq">
+                                <rect key="frame" x="175" y="334.33333333333331" width="175" height="0.0"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -83,6 +83,7 @@
                             </constraint>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="pge-C6-kEq" secondAttribute="trailing" constant="40" id="YHx-en-azV"/>
                             <constraint firstItem="dRT-Wf-hOH" firstAttribute="leading" secondItem="Iax-5N-VRN" secondAttribute="trailing" constant="30" id="aFK-QT-aWT"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="CUc-hy-Em9" secondAttribute="trailing" constant="121" id="ffC-lq-Ebb"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Z69-qp-0KA" secondAttribute="trailing" constant="28" id="l4Z-hF-mHB"/>
                             <constraint firstItem="Z69-qp-0KA" firstAttribute="leading" secondItem="T8y-Y1-yaa" secondAttribute="trailing" constant="30" id="lkE-xW-1Vw"/>
                             <constraint firstItem="pge-C6-kEq" firstAttribute="leading" secondItem="T8y-Y1-yaa" secondAttribute="trailing" constant="30" id="pb9-TL-diW"/>

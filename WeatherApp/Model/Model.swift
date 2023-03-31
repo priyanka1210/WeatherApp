@@ -28,3 +28,8 @@ struct TemperatureDetails: Decodable {
 struct LocationName: Decodable {
     let name: String
 }
+
+
+struct ErrorMessage: Decodable {
+    let message: String
+}

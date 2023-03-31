@@ -13,12 +13,22 @@ enum weatherImageError: Error {
 }
 
 class WeatherDataWebService {
-    func fetchWeatherDetails(url: URL , completion: @escaping (Data, Error?) -> Void)   {
+    func fetchWeatherDetails(url: URL , completion: @escaping (Data?, Error?) -> Void) {
+        
         URLSession.shared.dataTask(with: url) { data, response, error in
-            if let data = data {
-                completion(data,nil)
+//            if let data = data {
+//                completion(data,nil)
+//            }
+//            else {
+//                if let error = error {
+//                    completion(nil, error)
+//                }
+//            }
+            guard let data = data else {
+                completion(nil, error)
+                return
             }
-            
+            completion(data, nil)
         }.resume()
     }
     
