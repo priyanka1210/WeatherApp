@@ -16,15 +16,12 @@ enum weatherError: Error {
 
 class WeatherDetailsViewModel {
     
-    
     //function which fetches weather details by latitude and longitude
-    
     func fetchWeatherDetailsByLocation(latitude: CLLocationDegrees, longitude: CLLocationDegrees , completion: @escaping (_ location: String?, _ description: String?,_ temperature: String?,_ icon: String?,Error?)  -> Void) {
         guard let url = URL(string: "http://api.openweathermap.org/geo/1.0/reverse?lat=\(latitude)&lon=\(longitude)&limit=5&appid=a87de3e978286424bf3e516ba15074d7") else {
             print("invalid Location URL")
             return
         }
-        print(url)
         //API call to fetch city name
         WeatherDataWebService().fetchWeatherDetails(url: url) { [ weak self] data,error  in
             if let data = data {
@@ -35,7 +32,7 @@ class WeatherDetailsViewModel {
                         return
                     }
                     
-                    //Making API call using the city name fetched
+                    //Making API call using the city name fetched to get temp details
                     
                     self?.fetchWeatherDetailsByCity(city: city) { location, desc, temperature, icon, error in
                         completion(location,desc,temperature, icon, nil)
