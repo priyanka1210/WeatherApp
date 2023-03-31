@@ -29,7 +29,9 @@ struct LocationName: Decodable {
     let name: String
 }
 
-
-struct ErrorMessage: Decodable {
-    let message: String
+struct WeatherDetails {
+    let location: String
+    let description: String
+    let temperature: Double
+    let icon: String
 }

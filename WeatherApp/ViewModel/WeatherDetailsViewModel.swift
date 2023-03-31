@@ -12,15 +12,19 @@ import CoreLocation
 enum weatherError: Error {
     case invalidIcon
     case invalidInfo
+    case invalidLocation
 }
+
+
 
 class WeatherDetailsViewModel {
     
+    private var weatherdataViewModel: WeatherDataViewModel?
+    
     //function which fetches weather details by latitude and longitude
-    func fetchWeatherDetailsByLocation(latitude: CLLocationDegrees, longitude: CLLocationDegrees , completion: @escaping (_ location: String?, _ description: String?,_ temperature: String?,_ icon: String?,Error?)  -> Void) {
+    func fetchWeatherDetailsByLocation(latitude: CLLocationDegrees, longitude: CLLocationDegrees , completion: @escaping (WeatherDataViewModel?,Error?) -> Void) throws {
         guard let url = URL(string: "http://api.openweathermap.org/geo/1.0/reverse?lat=\(latitude)&lon=\(longitude)&limit=5&appid=a87de3e978286424bf3e516ba15074d7") else {
-            print("invalid Location URL")
-            return
+            throw weatherError.invalidLocation
         }
         //API call to fetch city name
         WeatherDataWebService().fetchWeatherDetails(url: url) { [ weak self] data,error  in
@@ -34,14 +38,17 @@ class WeatherDetailsViewModel {
                     
                     //Making API call using the city name fetched to get temp details
                     
-                    self?.fetchWeatherDetailsByCity(city: city) { location, desc, temperature, icon, error in
-                        completion(location,desc,temperature, icon, nil)
+                    self?.fetchWeatherDetailsByCity(city: city) { weatherDetails, error in
+                        if let weatherDetails = weatherDetails {
+                            completion(weatherDetails, nil)
+                        }
+                        
                     }
                 } catch {
-                    completion(nil, nil, nil, nil,error)
+                    completion(nil,error)
                 }
             } else {
-                completion(nil, nil, nil, nil,error)
+                completion(nil,error)
             }
         }
         
@@ -51,13 +58,13 @@ class WeatherDetailsViewModel {
     
     //fetches weather details using city
     
-    func fetchWeatherDetailsByCity(city: String, completion: @escaping (_ location: String?, _ description: String?,_ temperature: String?,_ icon: String?, Error?)  -> Void)  {
+    func fetchWeatherDetailsByCity(city: String, completion: @escaping (WeatherDataViewModel?, Error?)  -> Void)  {
         guard let url = URL(string: "https://api.openweathermap.org/data/2.5/weather?q=\(city)&appid=a87de3e978286424bf3e516ba15074d7&units=imperial") else {
             print("Invalid URL")
             return
         }
         print(url)
-        WeatherDataWebService().fetchWeatherDetails(url: url) { data, error  in
+        WeatherDataWebService().fetchWeatherDetails(url: url) { [weak self] data, error  in
             if let data = data {
                 do {
                     let weatherResponse = try  JSONDecoder().decode(WeatherResponse.self, from: data)
@@ -66,13 +73,16 @@ class WeatherDetailsViewModel {
                     let icon = weatherResponse.weather.first?.icon
                     let desc = weatherResponse.weather.first?.description
                     if let icon = icon , let desc = desc {
-                        completion(location,desc,"\(temp) °F", icon, nil)
+                        let weatherDetails = WeatherDetails(location: location, description: desc, temperature: temp, icon: icon)
+                        let vm = WeatherDataViewModel(weatherDetails: weatherDetails)
+                        self?.weatherdataViewModel = vm
+                        completion(vm, nil)
                     }
                 } catch  {
-                    completion(nil, nil, nil, nil, error)
+                    completion(nil, error)
                 }
             } else {
-                completion(nil, nil, nil, nil, error)
+                completion(nil, error)
             }
         }
     }
@@ -101,6 +111,34 @@ class WeatherDetailsViewModel {
             }
             
         }
+    }
+    
+    func getCelsius(completion: @escaping (Double) -> Void)  {
+        if let weatherdataViewModel = weatherdataViewModel {
+            let temp = weatherdataViewModel.temperature
+            weatherdataViewModel.temperature = (temp - 32) * 5/9
+            completion(weatherdataViewModel.temperature.rounded(toPlaces: 2))
+        }
+    }
+    
+    
+     func getFahrenheit(completion: @escaping (Double) -> Void)  {
+        if let weatherdataViewModel = weatherdataViewModel {
+            let temp = weatherdataViewModel.temperature
+            weatherdataViewModel.temperature = (temp * 9/5) + 32
+            completion(weatherdataViewModel.temperature.rounded(toPlaces: 2))
+            
+        }
+    }
+}
+
+
+class WeatherDataViewModel {
+    let weatherDetails: WeatherDetails
+    var temperature: Double
+    init(weatherDetails: WeatherDetails) {
+        self.weatherDetails = weatherDetails
+        self.temperature = weatherDetails.temperature
     }
     
 }
